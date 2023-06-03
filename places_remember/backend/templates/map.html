@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'css/map.css' %}">
+    <style>
+        #map {
+            height: 700px;
+            width: 100%;
+        }
+    </style>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=fab8378d-e145-4e8c-aa39-923203d9393f&lang=ru_RU"></script>
+    <script>
+        ymaps.ready(init);
+
+        function init() {
+            var map = new ymaps.Map("map", {
+                center: [55.76, 37.64],
+                zoom: 10
+            });
+
+            var places = JSON.parse('{{ places_json|escapejs }}');
+            for (var i = 0; i < places.length; i++) {
+                var place = places[i];
+                var coords = [place.latitude, place.longitude];
+                var name = place.name;
+                var comment = place.comment;
+                var marker = new ymaps.Placemark(coords, { hintContent: name, balloonContent: comment });
+                map.geoObjects.add(marker);
+            }
+        }
+    </script>
+    <title>Places Remember - Map</title>
+</head>
+<body>
+    <header>
+        <a href="{% url 'home' %}" class="site-title">Places Remember</a>
+        <div class="user-info">
+          <span class="user-name">{{ first_name }} {{ last_name }}</span>
+          <img src="{% static 'images/avatar.jpg' %}" alt="Аватар пользователя" class="avatar">
+          <!-- <img src="{{ avatar }}" alt="Аватар пользователя" class="avatar"> -->
+          <a href="{% url 'user_logout' %}">
+              <button class="logout-button">Выйти</button>
+          </a>
+        </div>
+      </header>
+    <main>
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+        <script>
+            var placesJson = "{{ places_json|safe }}";
+        </script>
+    </main>
+    <footer>
+        <a href="https://github.com/MeloPomelo/places-remember">GitHub</a>
+        <p>&copy; 2023 Places Remember. Все права защищены.</p>
+    </footer>
+</body>
+</html>

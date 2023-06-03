@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Places Remember</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Places Remember</h1>
+        <div class = vk-login>
+            <a href="{% url 'vk_login' %}" class="login-button">
+                <button>Войти с помощью VK</button>
+            </a>
+        </div>
+    </header>
+  
+    <main>
+        <p>"Places Remember" - ваш надежный виртуальный альманах, который поможет сохранить ваши самые яркие впечатления о посещаемых местах и создать памятные истории.</p>
+    </main>
+  
+    <footer>
+        <a href="https://github.com/MeloPomelo/places-remember">GitHub</a>
+        <p>&copy; 2023 Places Remember. Все права защищены.</p>
+    </footer>
+</body>
+</html>
+

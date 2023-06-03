@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'css/map.css' %}">
+    <style>
+        #map {
+            height: 700px;
+            width: 100%;
+        }
+    </style>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=fab8378d-e145-4e8c-aa39-923203d9393f&lang=ru_RU"></script>
+    <script>
+        ymaps.ready(init);
+
+        function init() {
+            var map = new ymaps.Map("map", {
+                center: [55.76, 37.64],
+                zoom: 10
+            });
+
+            map.events.add('click', function (e) {
+                var coords = e.get('coords');
+                document.getElementById('id_latitude').value = coords[0].toFixed(6);
+                document.getElementById('id_longitude').value = coords[1].toFixed(6);
+                placeMarker(coords);
+            });
+
+            function placeMarker(coords) {
+                var marker = new ymaps.Placemark(coords, {}, { draggable: true });
+                marker.events.add('dragend', function (e) {
+                    var position = e.get('target').geometry.getCoordinates();
+                    document.getElementById('id_latitude').value = position[0].toFixed(6);
+                    document.getElementById('id_longitude').value = position[1].toFixed(6);
+                });
+                map.geoObjects.add(marker);
+            }
+        }
+    </script>
+    <title>Places Remember - Add</title>
+</head>
+<body>
+    <header>
+        <a href="{% url 'home' %}" class="site-title">Places Remember</a>
+        <div class="user-info">
+          <span class="user-name">{{ first_name }} {{ last_name }}</span>
+          <img src="{% static 'images/avatar.jpg' %}" alt="Аватар пользователя" class="avatar">
+          <!-- <img src="{{ avatar }}" alt="Аватар пользователя" class="avatar"> -->
+          <a href="{% url 'user_logout' %}">
+              <button class="logout-button">Выйти</button>
+          </a>
+        </div>
+      </header>
+    <main>
+        
+        
+        <div class="map-container">
+            <div id="map"></div>
+            <div class="form-container">
+                <form method="POST" action="{% url 'add_note' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <a href="{% url 'home' %}">
+                        <button type="submit">Добавить</button>
+                    </a>
+                    <a href="{% url 'home' %}" class="cancel-button">Отмена</a>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <a href="https://github.com/MeloPomelo/places-remember">GitHub</a>
+        <p>&copy; 2023 Places Remember. Все права защищены.</p>
+    </footer>
+</body>
+</html>
