@@ -1,5 +1,3 @@
-
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -41,21 +39,19 @@
 <body>
 
     <div id="wrapper">
-        <!-- Хедер -->
         <header class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="#">Places Remember</a>
             <a class="btn btn-primary ml-auto" href="{% url 'vk_auth' %}">Войти с помощью VK</a>
         </header>
-
-        <!-- Боди -->
-        <div id="content" class="container mt-5">
-            <h1 class="text-center">Places Remember</h1>
-            <p class="text-center">Ваш надежный виртуальный альманах, который поможет сохранить ваши самые яркие
-                впечатления о посещаемых местах и создать памятные истории.</p>
-        </div>
+        <main class="py-5 d-flex justify-content-center align-items-center">
+            <div class="container text-center">
+                <h2 class="mb-4">Добро пожаловать в Places Remember!</h2>
+                <p>Places Remember - это веб-сервис, который поможет вам сохранить ваши самые
+                    драгоценные воспоминания о посещенных местах. Наш сервис предоставляет удобную платформу, где вы можете
+                    создавать список любимых мест, отмечая их на карте.</p>
+            </div>
+        </main>
     </div>
-
-    <!-- Футер -->
     <footer id="footer" class="text-center">
         <p>
             <a href="https://github.com/MeloPomelo/places-remember">GitHub</a> | &copy; 2023 Places Remember
