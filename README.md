@@ -23,8 +23,6 @@
 + Фреймворк для разработки REST API: `Django `
 + Контейнеризация: `Docker`
 + Дополнительные библиотеки: `bootstrap`
-+ Деплой: `Yandex Cloud`
-
 ---
 
 ## Установка и запуск проекта
@@ -40,13 +38,20 @@
     ```
     docker compose build
     ```
+4. Сделайте миграции
+    ```
+    docker compose run web python3 places_remember/manage.py makemigrations
+    
+    docker compose run web python3 places_remember/manage.py migrate    
+    ```
+
 4. Запустите приложение:
     ```
     docker compose up
     ```
 ### Приложение будет доступно по адресу: 
 
-### [http://localhost:8080](http://localhost:8080)
+### [http://localhost:8000](http://localhost:8000)
 
 ## Запуск тестов
 1. Перейдите в папку places_remember:
