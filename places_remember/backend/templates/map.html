@@ -1,16 +1,60 @@
-{% load static %}
 <!DOCTYPE html>
-<!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <link rel="stylesheet" href="{% static 'css/map.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        #map {
-            height: 700px;
+        html,
+        body {
+            height: 100%;
+        }
+
+        #wrapper {
+            min-height: 100%;
+            position: relative;
+        }
+
+        #content {
+            padding-bottom: 60px;
+        }
+
+        #footer {
+            position: fixed;
+            bottom: 0;
             width: 100%;
+            height: 60px;
+            line-height: 60px;
+            background-color: #f5f5f5;
+        }
+
+        #map {
+            height: calc(100vh - 60px);
         }
     </style>
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=fab8378d-e145-4e8c-aa39-923203d9393f&lang=ru_RU"></script>
+    <title>Places Remember - Map</title>
+</head>
+
+<body>
+
+    <div id="wrapper">
+        <header class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Places Remember</a>
+            <a href="{% url 'index' %}" class="btn btn-primary ml-auto">На главную</a>
+        </header>
+        <div id="content">
+            <div id="map"></div>
+        </div>
+    </div>
+    <footer id="footer" class="text-center">
+        <p>
+            <a href="https://github.com/MeloPomelo/places-remember">GitHub</a> | &copy; 2023 Places Remember
+        </p>
+    </footer>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=fab8378d-e145-4e8c-aa39-923203d9393f&lang=ru_RU"
+        type="text/javascript"></script>
     <script>
         ymaps.ready(init);
 
@@ -31,31 +75,9 @@
             }
         }
     </script>
-    <title>Places Remember - Map</title>
-</head>
-<body>
-    <header>
-        <a href="{% url 'home' %}" class="site-title">Places Remember</a>
-        <div class="user-info">
-          <span class="user-name">{{ first_name }} {{ last_name }}</span>
-          <img src="{% static 'images/avatar.jpg' %}" alt="Аватар пользователя" class="avatar">
-          <!-- <img src="{{ avatar }}" alt="Аватар пользователя" class="avatar"> -->
-          <a href="{% url 'user_logout' %}">
-              <button class="logout-button">Выйти</button>
-          </a>
-        </div>
-      </header>
-    <main>
-        <div class="map-container">
-            <div id="map"></div>
-        </div>
-        <script>
-            var placesJson = "{{ places_json|safe }}";
-        </script>
-    </main>
-    <footer>
-        <a href="https://github.com/MeloPomelo/places-remember">GitHub</a>
-        <p>&copy; 2023 Places Remember. Все права защищены.</p>
-    </footer>
+    <script>
+        var placesJson = "{{ places_json|safe }}";
+    </script>
 </body>
+
 </html>

@@ -1,21 +1,159 @@
-{% load static %}
 <!DOCTYPE html>
-<!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <link rel="stylesheet" href="{% static 'css/map.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         #map {
-            height: 700px;
+            height: calc(100% - 60px);
+        }
+
+        #form-container {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translate(0, -50%);
+            width: 300px;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #e9e9e9;
+            border-radius: 4px;
+        }
+
+        #form-container .form-group {
+            margin-bottom: 10px;
+        }
+
+        #form-container .btn-primary {
+            margin-top: 10px;
+        }
+
+        #footer {
+            position: fixed;
+            bottom: 0;
             width: 100%;
+            height: 60px;
+            line-height: 60px;
+            background-color: #f5f5f5;
+        }
+
+        .btn-home {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+        }
+
+        #form-container {
+            width: 450px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-primary:active {
+            background-color: #004080;
+        }
+
+        .btn-primary:focus {
+            outline: none;
+            box-shadow: none;
         }
     </style>
+    <title>Places Remember - Add Note</title>
+</head>
+
+<body>
+    <header class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Places Remember</a>
+        <a href="{% url 'index' %}" class="btn btn-primary ml-auto">На главную</a>
+    </header>
+    <div id="map"></div>
+    <div id="form-container">
+        <h2>Добавить заметку</h2>
+        <form action="{% url 'add_note' %}" method="POST">
+            {% csrf_token %}
+            <div id="form-container">
+                <h2>Добавить заметку</h2>
+                <div class="form-group">
+                    <label for="{{ form.title.id_for_label }}">Название</label>
+                    {{ form.name }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.description.id_for_label }}">Описание</label>
+                    {{ form.comment }}
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="{{ form.latitude.id_for_label }}">Широта</label>
+                        {{ form.latitude }}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="{{ form.longitude.id_for_label }}">Долгота</label>
+                        {{ form.longitude }}
+                    </div>
+                </div>
+                <a href="{% url 'index' %}">
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                </a>
+            </div>
+        </form>
+    </div>
+    <footer id="footer" class="text-center">
+        <p>
+            <a href="https://github.com/MeloPomelo/places-remember">GitHub</a> | &copy; 2023 Places Remember
+        </p>
+    </footer>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=fab8378d-e145-4e8c-aa39-923203d9393f&lang=ru_RU"></script>
     <script>
+        var map;
+        var marker;
+
         ymaps.ready(init);
 
         function init() {
-            var map = new ymaps.Map("map", {
+            map = new ymaps.Map("map", {
                 center: [55.76, 37.64],
                 zoom: 10
             });
@@ -28,7 +166,11 @@
             });
 
             function placeMarker(coords) {
-                var marker = new ymaps.Placemark(coords, {}, { draggable: true });
+                if (marker) {
+                    map.geoObjects.remove(marker);
+                }
+
+                marker = new ymaps.Placemark(coords, {}, { draggable: true });
                 marker.events.add('dragend', function (e) {
                     var position = e.get('target').geometry.getCoordinates();
                     document.getElementById('id_latitude').value = position[0].toFixed(6);
@@ -37,42 +179,9 @@
                 map.geoObjects.add(marker);
             }
         }
-    </script>
-    <title>Places Remember - Add</title>
-</head>
-<body>
-    <header>
-        <a href="{% url 'home' %}" class="site-title">Places Remember</a>
-        <div class="user-info">
-          <span class="user-name">{{ first_name }} {{ last_name }}</span>
-          <img src="{% static 'images/avatar.jpg' %}" alt="Аватар пользователя" class="avatar">
-          <!-- <img src="{{ avatar }}" alt="Аватар пользователя" class="avatar"> -->
-          <a href="{% url 'user_logout' %}">
-              <button class="logout-button">Выйти</button>
-          </a>
-        </div>
-      </header>
-    <main>
-        
-        
-        <div class="map-container">
-            <div id="map"></div>
-            <div class="form-container">
-                <form method="POST" action="{% url 'add_note' %}">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <a href="{% url 'home' %}">
-                        <button type="submit">Добавить</button>
-                    </a>
-                    <a href="{% url 'home' %}" class="cancel-button">Отмена</a>
-                </form>
-            </div>
-        </div>
-    </main>
 
-    <footer>
-        <a href="https://github.com/MeloPomelo/places-remember">GitHub</a>
-        <p>&copy; 2023 Places Remember. Все права защищены.</p>
-    </footer>
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

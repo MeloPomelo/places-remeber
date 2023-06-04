@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-8$rpwt06fl_$1o6i2aw3eiml$&yt3yrsfa33kk&$a!7i)(0=%y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -114,7 +114,7 @@ SOCIAL_AUTH_VK_OAUTH2_KEY = '51662442'
 SOCIAL_AUTH_VK_OAUTH2_SECRET = 'PpzySNJdnE3ysO8RmUWD'
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'index'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
